@@ -221,8 +221,8 @@ function ESP:Add(obj, options)
         Object = obj,
         Player = options.Player or plrs:GetPlayerFromCharacter(obj),
         PrimaryPart = options.PrimaryPart or obj.ClassName == "Model" and (obj.PrimaryPart or obj:FindFirstChild("HumanoidRootPart") or obj:FindFirstChildWhichIsA("BasePart")) or obj:IsA("BasePart") and obj,
-        Health = obj.Health,
-		BattlePower = obj.Config.BattlePower,
+        Health = obj:WaitForChild("Health", 5),
+		BattlePower = obj:WaitForChild("Config", 5) and obj.Config:WaitForChild("BattlePower"),
 		Components = {},
         IsEnabled = options.IsEnabled,
         Temporary = options.Temporary,
@@ -295,7 +295,6 @@ local function HumanoidAdded(humanoid)
 	local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
 	if root then
 		ESP:Add(humanoid.Parent, {
-			Name = humanoid.Parent.Name,
 			Player = humanoid.Parent,
 			PrimaryPart = humanoid.Parent.HumanoidRootPart
 		})
@@ -305,7 +304,6 @@ local function HumanoidAdded(humanoid)
 			if c.Name == "HumanoidRootPart" then
                 ev:Disconnect()
                 ESP:Add(humanoid.Parent, {
-                    Name = humanoid.Parent.Name,
                     Player = humanoid.Parent,
                     PrimaryPart = c
                 })
@@ -319,19 +317,6 @@ for _,v in pairs(workspace:GetDescendants()) do
 	if v:IsA("Humanoid") and v.Parent ~= plr.Character then
 		HumanoidAdded(v)
 	end
-end
-
-local function PlayerAdded(Position)
-    Position.CharacterAdded:Connect(CharAdded)
-    if Position.Character then
-        coroutine.wrap(CharAdded)(Position.Character)
-    end
-end
-plrs.PlayerAdded:Connect(PlayerAdded)
-for i,v in pairs(plrs:GetPlayers()) do
-    if v ~= plr then
-        PlayerAdded(v)
-    end
 end
 
 game:GetService("RunService").RenderStepped:Connect(function()
