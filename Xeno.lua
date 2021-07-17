@@ -312,12 +312,14 @@ local function HumanoidAdded(humanoid)
 	end
 end
 
+print('added')
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
 	if v:IsA("Humanoid") and v.Parent ~= plr.Character then
 		coroutine.wrap(HumanoidAdded)(v)
 	end
 end
+print('deleted')
 
 game:GetService("RunService").RenderStepped:Connect(function()
     for _,v in (ESP.Enabled and pairs or ipairs)(ESP.Objects) do
