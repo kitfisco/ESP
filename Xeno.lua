@@ -3,7 +3,7 @@ local ESP = {
     Enabled = true,
     Boxes = true,
     BoxShift = CFrame.new(0,-1.5,0),
-    BoxSize = Vector3.new(4,6,0),
+	BoxSize = Vector3.new(4,6,0),
     Color = Color3.fromRGB(255, 170, 0),
     FaceCamera = false,
     Names = true,
@@ -295,6 +295,7 @@ local function HumanoidAdded(humanoid)
 	local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
 	if root then
 		ESP:Add(humanoid.Parent, {
+            Name = humanoid.Parent.Name
 			Player = humanoid.Parent,
 			PrimaryPart = humanoid.Parent.HumanoidRootPart
 		})
@@ -304,6 +305,7 @@ local function HumanoidAdded(humanoid)
 			if c.Name == "HumanoidRootPart" then
                 ev:Disconnect()
                 ESP:Add(humanoid.Parent, {
+                    Name = humanoid.Parent.Name
                     Player = humanoid.Parent,
                     PrimaryPart = c
                 })
@@ -315,7 +317,9 @@ end
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
 	if v:FindFirstChild("Humanoid") and v ~= plr.Character then
-		HumanoidAdded(v.Humanoid)
+		spawn(function()
+            HumanoidAdded(v.Humanoid)
+        end)
 	end
 end
 
