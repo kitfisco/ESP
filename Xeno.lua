@@ -295,7 +295,7 @@ local function HumanoidAdded(humanoid)
 	local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
 	if root then
 		ESP:Add(humanoid.Parent, {
-            Name = humanoid.Parent.Name
+            Name = humanoid.Parent.Name,
 			Player = humanoid.Parent,
 			PrimaryPart = humanoid.Parent.HumanoidRootPart
 		})
@@ -305,7 +305,7 @@ local function HumanoidAdded(humanoid)
 			if c.Name == "HumanoidRootPart" then
                 ev:Disconnect()
                 ESP:Add(humanoid.Parent, {
-                    Name = humanoid.Parent.Name
+                    Name = humanoid.Parent.Name,
                     Player = humanoid.Parent,
                     PrimaryPart = c
                 })
