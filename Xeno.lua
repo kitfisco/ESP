@@ -316,7 +316,7 @@ print('added')
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
 	if v:IsA("Humanoid") and v.Parent ~= plr.Character then
-		coroutine.wrap(HumanoidAdded)(v)
+		HumanoidAdded(v)
 	end
 end
 print('deleted')
