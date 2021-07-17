@@ -316,7 +316,7 @@ end
 
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
-	if v:FindFirstChild("Humanoid") and v ~= plr.Character then
+	if v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") and v ~= plr.Character then
 		spawn(function()
             HumanoidAdded(v.Humanoid)
         end)
