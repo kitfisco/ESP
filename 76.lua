@@ -11,7 +11,6 @@ local ESP = {
     AttachShift = 1,    
     Objects = setmetatable({}, {__mode="kv"}),
     Overrides = {}
-    Entities = {}
 }
 
 --Declarations--
@@ -259,14 +258,12 @@ local function HumanoidAdded(humanoid)
 	end
 	local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
 	if root then
-        Entities[humanoid.Parent] = true
 		ESP:Add(humanoid.Parent, {
             Name = humanoid.Parent.Name,
 			Player = humanoid.Parent,
 			PrimaryPart = humanoid.Parent.HumanoidRootPart
 		})
 	else
-        Entities[humanoid.Parent] = true
 		local ev
 		ev = humanoid.Parent.ChildAdded:Connect(function(c)
 			if c.Name == "HumanoidRootPart" then
@@ -282,11 +279,6 @@ local function HumanoidAdded(humanoid)
 end
 
 workspace.DescendantAdded:Connect(HumanoidAdded)
-workspace.DescendantRemoving:Connect(function(object)
-    if Entities[humanoid.Parent] then
-        Entities[humanoid.Parent] = nil
-    end
-end)
 for _,v in pairs(workspace:GetDescendants()) do
 	if v:FindFirstChild("Humanoid") and v ~= plr.Character then
 		HumanoidAdded(v.Humanoid)
