@@ -289,7 +289,7 @@ function ESP:Add(obj, options)
 end
 
 local function HumanoidAdded(humanoid)
-	if humanoid:IsA("Part") and humanoid.Name == "HumanoidRootPart" and humanoid.Parent ~= plr.Character then
+	if humanoid:IsA("Part") and humanoid.Name == "HumanoidRootPart" and humanoid.Parent ~= plr.Character and humanoid.Parent:FindFirstChild("Health") then
         ESP:Add(humanoid.Parent, {
             Name = humanoid.Parent.Name,
             Player = humanoid.Parent,
