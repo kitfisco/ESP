@@ -1,7 +1,7 @@
 --Settings--
 local ESP = {
     Enabled = true,
-    Boxes = true,
+    Boxes = false,
     BoxShift = CFrame.new(0,-1.5,0),
 	BoxSize = Vector3.new(4,6,0),
     Color = Color3.fromRGB(255, 170, 0),
@@ -289,37 +289,35 @@ function ESP:Add(obj, options)
 end
 
 local function HumanoidAdded(humanoid)
-	if not humanoid:IsA("Humanoid") or humanoid.Parent == plr.Character then
-		return
-	end
-	local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
-	if root then
-		ESP:Add(humanoid.Parent, {
-            Name = humanoid.Parent.Name,
-			Player = humanoid.Parent,
-			PrimaryPart = humanoid.Parent.HumanoidRootPart
-		})
-	else
-		local ev
-		ev = humanoid.Parent.ChildAdded:Connect(function(c)
-			if c.Name == "HumanoidRootPart" then
-                ev:Disconnect()
-                ESP:Add(humanoid.Parent, {
-                    Name = humanoid.Parent.Name,
-                    Player = humanoid.Parent,
-                    PrimaryPart = c
-                })
-			end
-		end)
-	end
+	if humanoid:IsA("Humanoid") and humanoid.Parent ~= plr.Character then
+        local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
+        if root then
+            ESP:Add(humanoid.Parent, {
+                Name = humanoid.Parent.Name,
+                Player = humanoid.Parent,
+                PrimaryPart = humanoid.Parent.HumanoidRootPart
+            })
+        else
+            local ev
+            ev = humanoid.Parent.ChildAdded:Connect(function(c)
+                if c.Name == "HumanoidRootPart" then
+                    ESP:Add(humanoid.Parent, {
+                        Name = humanoid.Parent.Name,
+                        Player = humanoid.Parent,
+                        PrimaryPart = c
+                    })
+                    ev:Disconnect()
+                end
+            end)
+        end
+    
+    end
 end
 
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
-	if v:FindFirstChild("Humanoid") and v:FindFirstChild("Health") and v ~= plr.Character then
-		spawn(function()
-            HumanoidAdded(v.Humanoid)
-        end)
+	if v:IsA("Humanoid") and v.Parent:FindFirstChild("Health") and v.Parent ~= plr.Character then
+		HumanoidAdded(v)
 	end
 end
 
