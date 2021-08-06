@@ -289,34 +289,18 @@ function ESP:Add(obj, options)
 end
 
 local function HumanoidAdded(humanoid)
-	if humanoid:IsA("Humanoid") and humanoid.Parent ~= plr.Character then
-        local root = humanoid.Parent:FindFirstChild("HumanoidRootPart")
-        if root then
-            ESP:Add(humanoid.Parent, {
-                Name = humanoid.Parent.Name,
-                Player = humanoid.Parent,
-                PrimaryPart = humanoid.Parent.HumanoidRootPart
-            })
-        else
-            local ev
-            ev = humanoid.Parent.ChildAdded:Connect(function(c)
-                if c.Name == "HumanoidRootPart" then
-                    ESP:Add(humanoid.Parent, {
-                        Name = humanoid.Parent.Name,
-                        Player = humanoid.Parent,
-                        PrimaryPart = c
-                    })
-                    ev:Disconnect()
-                end
-            end)
-        end
-    
+	if humanoid:IsA("Part") and humanoid.Name == "HumanoidRootPart" and humanoid.Parent ~= plr.Character then
+        ESP:Add(humanoid.Parent, {
+            Name = humanoid.Parent.Name,
+            Player = humanoid.Parent,
+            PrimaryPart = humanoid
+        })
     end
 end
 
 workspace.DescendantAdded:Connect(HumanoidAdded)
 for _,v in pairs(workspace:GetDescendants()) do
-	if v:IsA("Humanoid") and v.Parent:FindFirstChild("Health") and v.Parent ~= plr.Character then
+	if v:IsA("Part") and v.Name == "HumanoidRootPart" and v.Parent ~= plr.Character then
 		HumanoidAdded(v)
 	end
 end
