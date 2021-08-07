@@ -288,21 +288,36 @@ function ESP:Add(obj, options)
     return box
 end
 
-local function HumanoidAdded(humanoid)
-	if humanoid:IsA("Part") and humanoid.Name == "HumanoidRootPart" and humanoid.Parent ~= plr.Character and humanoid.Parent:WaitForChild("Health", 5) then
-        ESP:Add(humanoid.Parent, {
-            Name = humanoid.Parent.Name,
-            Player = humanoid.Parent,
-            PrimaryPart = humanoid
-        })
+local function CharAdded(char)
+    if char:IsA("Model") and char:WaitForChild("HumanoidRootPart", 10) then
+        if char:FindFirstChild("Health") then
+            ESP:Add(char, {
+                Name = char.Name,
+                Player = char,
+                PrimaryPart = char.HumanoidRootPart
+            })
+        else
+            local con
+            con = char.ChildAdded:Connect(function(child)
+                if child.Name == "Health" then
+                    ESP:Add(char, {
+                        Name = char.Name,
+                        Player = char,
+                        PrimaryPart = char.HumanoidRootPart
+                    })
+                    con:Disconnect()
+                    con = nil
+                end
+            end)
+        end
     end
 end
 
-workspace.DescendantAdded:Connect(HumanoidAdded)
+workspace.DescendantAdded:Connect(CharAdded)
 for _,v in pairs(workspace:GetDescendants()) do
-	if v:IsA("Part") and v.Name == "HumanoidRootPart" and v.Parent ~= plr.Character and v.Parent:FindFirstChild("Health") then
+	if v:IsA("Model") and v:FindFirstChild("Health") and v ~= plr.Character then
 		spawn(function()
-            HumanoidAdded(v)
+            CharAdded(v)
         end)
 	end
 end
