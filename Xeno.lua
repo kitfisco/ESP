@@ -288,38 +288,26 @@ function ESP:Add(obj, options)
     return box
 end
 
-local function CharAdded(char)
-    if char:IsA("Model") and char:WaitForChild("HumanoidRootPart", 10) then
-        if char:FindFirstChild("Health") then
-            ESP:Add(char, {
-                Name = char.Name,
-                Player = char,
-                PrimaryPart = char.HumanoidRootPart
+local function CharAdded(battlepower)
+    if battlepower:IsA("IntValue") and battlepower.Name == "BattlePower" then
+        local character = battlepower.Parent.Parent
+        local health = character:WaitForChild("Health", 20)
+        local root = health and character:WaitForChild("HumanoidRootPart", 10)
+        if root and character ~= plr.Character then
+            ESP:Add(character, {
+                Name = character.Name,
+                Player = character,
+                PrimaryPart = root
             })
-        else
-            local con
-            con = char.ChildAdded:Connect(function(child)
-                if child.Name == "Health" then
-                    ESP:Add(char, {
-                        Name = char.Name,
-                        Player = char,
-                        PrimaryPart = char.HumanoidRootPart
-                    })
-                    con:Disconnect()
-                    con = nil
-                end
-            end)
         end
     end
 end
 
 workspace.DescendantAdded:Connect(CharAdded)
 for _,v in pairs(workspace:GetDescendants()) do
-	if v:IsA("Model") and v:FindFirstChild("Health") and v ~= plr.Character then
-		spawn(function()
-            CharAdded(v)
-        end)
-	end
+	if v:IsA("IntValue") and v.Name == "BattlePower" then
+        CharAdded(v)
+    end
 end
 
 game:GetService("RunService").RenderStepped:Connect(function()
