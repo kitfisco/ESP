@@ -1,7 +1,7 @@
 local ESP = {
     Enabled = true,
     BoxShift = CFrame.new(0,-1.5,0),
-	BoxSize = Vector3.new(4,6,0),
+    BoxSize = Vector3.new(4,6,0),
     Color = Color3.fromRGB(255, 170, 0),
     Thickness = 2,
     AttachShift = 1,    
@@ -83,7 +83,7 @@ function ESP:Add(obj, options)
         Name = obj.Name,
         Type = "Box",
         Object = obj,
-        Extra = options.Extra
+        Extra = options.Extra,
         Color = options.Color or ESP.Color,
         Size = options.Size or self.BoxSize,
         Player = options.Player or foundCharacter,
@@ -126,32 +126,34 @@ function ESP:Add(obj, options)
     return box
 end
 
-local function BPAdded(battlepower)
-    if battlepower:IsA("IntValue") and battlepower.Name == "BattlePower" then
-        local character = battlepower.Parent.Parent
-        local health = character:WaitForChild("Health", 20)
-        local root = health and character:WaitForChild("HumanoidRootPart", 20)
-        if root and character ~= plr.Character then
-            ESP:Add(character, {
-                Name = character.Name,
-                Player = character,
-                PrimaryPart = root
-                Extra = {
-                    BP = battlepower
-                    Health = health
-                }
-            })
-        else
-            print(character, health, root)
+do
+    local function BPAdded(battlepower)
+        if battlepower:IsA("IntValue") and battlepower.Name == "BattlePower" then
+            local character = battlepower.Parent.Parent
+            local health = character:WaitForChild("Health", 20)
+            local root = health and character:WaitForChild("HumanoidRootPart", 20)
+            if root and character ~= LocalPlayer.Character then
+                ESP:Add(character, {
+                    Name = character.Name,
+                    Player = character,
+                    PrimaryPart = root,
+                    Extra = {
+                        BP = battlepower,
+                        Health = health
+                    }
+                })
+            else
+                print(character, health, root)
+            end
         end
     end
-end
 
-workspace.DescendantAdded:Connect(HumanoidAdded)
-for _,v in pairs(workspace:GetDescendants()) do
-	if v:IsA("IntValue") and v.Name == "BattlePower" then
-		task.spawn(BPAdded, v)
-	end
+    workspace.DescendantAdded:Connect(BPAdded)
+    for _,v in pairs(workspace:GetDescendants()) do
+        if v:IsA("IntValue") and v.Name == "BattlePower" then
+            task.spawn(BPAdded, v)
+        end
+    end
 end
 
 RunService.RenderStepped:Connect(function()
