@@ -79,14 +79,16 @@ function ESP:Add(obj, options)
     if obj.Parent == nil then return end
 
     local foundCharacter = obj.Parent == workspace and Players:FindFirstChild(obj.Name)
+    Color = options.Color or Position and Position.TeamColor and Position.Team and Position.TeamColor.Color,
+
+
     local box = setmetatable({
         Name = obj.Name,
         Type = "Box",
         Object = obj,
         Extra = options.Extra,
-        Color = options.Color or ESP.Color,
+        Color = options.Color or (foundCharacter and foundCharacter.TeamColor and foundCharacter.Team and foundCharacter.TeamColor.Color) or ESP.Color,
         Size = options.Size or self.BoxSize,
-        Player = options.Player or foundCharacter,
         PrimaryPart = options.PrimaryPart or obj:FindFirstChild("HumanoidRootPart"),
 		Components = {},
     }, boxBase)
@@ -134,7 +136,6 @@ do
             if root and character ~= LocalPlayer.Character then
                 ESP:Add(character, {
                     Name = character.Name,
-                    Player = character,
                     PrimaryPart = root,
                     Extra = {
                         Humanoid = humanoid,
