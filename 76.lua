@@ -79,8 +79,6 @@ function ESP:Add(obj, options)
     if obj.Parent == nil then return end
 
     local foundCharacter = obj.Parent == workspace and Players:FindFirstChild(obj.Name)
-    Color = options.Color or Position and Position.TeamColor and Position.Team and Position.TeamColor.Color,
-
 
     local box = setmetatable({
         Name = obj.Name,
