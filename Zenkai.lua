@@ -67,7 +67,7 @@ function boxBase:Update()
         
         self.Components.Distance.Visible = true
         self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-        if Melee then
+        if self.Extra.Melee then
             self.Components.Distance.Text = string.format("[%s][%s][%s]", math.floor((Camera.CFrame.Position - cf.Position).Magnitude), math.floor(self.Extra.Humanoid.Health).."/"..self.Extra.Humanoid.MaxHealth, self.Extra.Melee.Value)
         else
             self.Components.Distance.Text = string.format("[%s][%s]", math.floor((Camera.CFrame.Position - cf.Position).Magnitude), math.floor(self.Extra.Humanoid.Health).."/"..self.Extra.Humanoid.MaxHealth)
