@@ -67,7 +67,7 @@ function boxBase:Update()
         
         self.Components.Distance.Visible = true
         self.Components.Distance.Position = Vector2.new(TagPos.X, TagPos.Y + 14)
-        self.Components.Distance.Text = string.format("[%s][%s]", math.floor((Camera.CFrame.Position - cf.Position).Magnitude), math.floor(self.Extra.Humanoid.Health).."/"..self.Extra.Humanoid.MaxHealth)
+        self.Components.Distance.Text = string.format("[%s][%s]", math.floor((Camera.CFrame.Position - cf.Position).Magnitude), math.floor(self.Extra.Humanoid.Health).."/"..math.floor(self.Extra.Humanoid.MaxHealth))
         self.Components.Distance.Color = Color3.fromRGB(255,255,255)
     else
         self.Components.Name.Visible = false
