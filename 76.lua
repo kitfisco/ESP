@@ -130,11 +130,10 @@ do
     local function HumanoidAdded(humanoid)
         if humanoid:IsA("Humanoid") and humanoid.Parent:IsA("Model") then
             local character = humanoid.Parent
-            local root = character:WaitForChild("HumanoidRootPart", 20)
-            if root and character ~= LocalPlayer.Character then
+            if character ~= LocalPlayer.Character and character:WaitForChild("HumanoidRootPart", 40) then
                 ESP:Add(character, {
                     Name = character.Name,
-                    PrimaryPart = root,
+                    PrimaryPart = character.HumanoidRootPart,
                     Extra = {
                         Humanoid = humanoid,
                     }
